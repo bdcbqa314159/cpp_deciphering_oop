@@ -1,0 +1,3 @@
+project(part_one)
+
+add_subdirectory(understanding_basic_cpp_assumptions)
