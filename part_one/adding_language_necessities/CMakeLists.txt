@@ -1,0 +1,10 @@
+project(adding_language_necessities)
+
+add_executable(main12 main12.cpp)
+add_executable(main13 main13.cpp)
+add_executable(main14 main14.cpp)
+add_executable(main15 main15.cpp)
+add_executable(main16 main16.cpp)
+add_executable(main17 main17.cpp)
+add_executable(main18 main18.cpp)
+add_executable(main19 main19.cpp)
