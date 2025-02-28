@@ -129,6 +129,7 @@ Student::Student(const Student &s) : Person(s), gpa(s.gpa), currentCourse(s.curr
 
 Student::~Student()
 {
+    numOfStudents--;
     cout << "destructor: " << getFirstName() << " " << getLastName() << "\n";
 }
 

@@ -17,19 +17,31 @@ protected:
 public:
     Person() = default;
     Person(const string &, const string &, const string &, char);
+    Person(const Person &) = delete;
     virtual ~Person();
 
     const string &getFirstName() const { return firstName; }
     const string &getLastName() const { return lastName; }
     const string &getTitle() const { return title; }
     char getMiddleInitial() const { return middleInitial; }
-
-    virtual void print() const;
-    virtual void isA() const;
-    virtual void greeting(const string &) const;
 };
 
-class Student : public Person
+class BillableEntity
+{
+private:
+    float invoiceAmt{};
+
+public:
+    BillableEntity() = default;
+    BillableEntity(float amt) : invoiceAmt(amt) {}
+    BillableEntity(const BillableEntity &) = delete;
+    virtual ~BillableEntity();
+    void pay(float amt) { invoiceAmt -= amt; }
+    float getBalance() const { return invoiceAmt; }
+    void balance() const;
+};
+
+class Student : public Person, public BillableEntity
 {
 private:
     float gpa{};
@@ -39,11 +51,12 @@ private:
 
 public:
     Student();
-    Student(const string &, const string &, const string &, char, float, const string &, const string &);
-    Student(const Student &);
+    Student(const string &, const string &, const string &, char, float, const string &, const string &, float);
+    Student(const Student &) = delete;
 
     ~Student() override;
 
+    void print() const;
     void earnPHD();
 
     float getGpa() const { return gpa; }
@@ -52,9 +65,6 @@ public:
 
     void setCurrentCourse(const string &newCourse) { currentCourse = newCourse; }
 
-    void print() const final override;
-    void isA() const override;
-
     static int getNumOfStudents();
 };
 
@@ -62,27 +72,23 @@ int Student::numOfStudents = 0;
 
 int main()
 {
-    Person *people[MAX] = {};
-    people[0] = new Person("Juliet", "Martinez",
-                           "Ms.", 'M');
-    people[1] = new Student("Hana", "Sato", "Dr.", 'U',
-                            3.8, "C++", "178PSU");
-    people[2] = new Student("Sara", "Kato", "Dr.", 'B',
-                            3.9, "C++", "272PSU");
-    people[3] = new Person("Giselle", "LeBrun",
-                           "Miss", 'R');
-
-    people[4] = new Person("Linus", "Van Pelt",
-                           "Mr.", 'S');
-
-    for (int i = 0; i < MAX; i++)
-    {
-        people[i]->isA();
-        cout << " ";
-        people[i]->print();
-    }
-    for (int i = 0; i < MAX; i++)
-        delete people[i];
+    float tuition1 = 1000.00, tuition2 = 2000.00;
+    Student s1("Gabby", "Doone", "Ms.", 'A', 3.9, "C++",
+               "178GWU", tuition1);
+    Student s2("Zack", "Moon", "Dr.", 'R', 3.9, "C++",
+               "272MIT", tuition2);
+    // public mbrs. of Person, BillableEntity, Student are
+    // accessible from any scope, including main()
+    s1.print();
+    s2.print();
+    cout << s1.getFirstName() << " paid $500.00" << endl;
+    s1.pay(500.00);
+    cout << s2.getFirstName() << " paid $750.00" << endl;
+    s2.pay(750.00);
+    cout << s1.getFirstName() << ": ";
+    s1.balance();
+    cout << s2.getFirstName() << ": ";
+    s2.balance();
 
     return 0;
 }
@@ -99,19 +105,17 @@ void Person::modifyTitle(const string &newTitle)
     title = newTitle;
 }
 
-void Person::print() const
+BillableEntity::~BillableEntity()
 {
-    cout << firstName << " " << middleInitial << ". " << lastName << endl;
+    cout << "BillableEntity destructor" << endl;
 }
 
-void Person::isA() const
+void BillableEntity::balance() const
 {
-    cout << "Person" << endl;
-}
-
-void Person::greeting(const string &msg) const
-{
-    cout << msg << endl;
+    if (invoiceAmt >= 0.)
+        cout << "owed amount: $ " << invoiceAmt << endl;
+    else
+        cout << "credit: $ " << 0. - invoiceAmt << endl;
 }
 
 inline int Student::getNumOfStudents()
@@ -124,12 +128,7 @@ Student::Student() : studentId(to_string(numOfStudents + 100) + "Id")
     numOfStudents++;
 }
 
-Student::Student(const string &fn, const string &ln, const string &t, char mi, float avg, const string &course, const string &id) : Person(fn, ln, t, mi), gpa(avg), currentCourse(course), studentId(id)
-{
-    numOfStudents++;
-}
-
-Student::Student(const Student &s) : Person(s), gpa(s.gpa), currentCourse(s.currentCourse), studentId(s.studentId)
+Student::Student(const string &fn, const string &ln, const string &t, char mi, float avg, const string &course, const string &id, float amt) : Person(fn, ln, t, mi), gpa(avg), BillableEntity(amt), currentCourse(course), studentId(id)
 {
     numOfStudents++;
 }
@@ -150,9 +149,5 @@ void Student::print() const
     cout << getTitle() << " " << getFirstName() << " " << getMiddleInitial() << ". " << getLastName() << "\n";
     cout << "with id: " << studentId << " and gpa: " << setprecision(2) << gpa << "\n";
     cout << "course: " << currentCourse << "\n";
-}
-
-void Student::isA() const
-{
-    cout << "Student" << endl;
+    cout << "with balance: $ " << getBalance() << "\n";
 }
