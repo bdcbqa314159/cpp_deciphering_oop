@@ -2,4 +2,5 @@ project(part_three)
 
 add_subdirectory(handling_exceptions)
 add_subdirectory(friends_and_operator_overloading)
+add_subdirectory(working_with_templates)
 
