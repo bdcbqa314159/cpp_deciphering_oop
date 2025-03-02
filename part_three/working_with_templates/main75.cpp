@@ -12,7 +12,7 @@ private:
     Type *data = nullptr;
     LinkListElement *next = nullptr;
 
-    Type *getData() const { return next; }
+    Type *getData() const { return data; }
     LinkListElement *getNext() const { return next; }
     void setNext(LinkListElement *e) { next = e; }
 

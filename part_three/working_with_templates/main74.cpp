@@ -27,7 +27,7 @@ public:
     Type &operator[](int index)
     {
         if (index < numElements)
-            return contents[i];
+            return contents[index];
         else
             throw ::std::out_of_range(std::to_string(index));
     }
