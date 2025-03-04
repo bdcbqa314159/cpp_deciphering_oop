@@ -1,0 +1,11 @@
+project(understanding_stl_basics)
+
+add_executable(main76 main76.cpp)
+add_executable(main77 main77.cpp)
+add_executable(main78 main78.cpp)
+add_executable(main79 main79.cpp)
+add_executable(main80 main80.cpp)
+add_executable(main81 main81.cpp)
+add_executable(main82 main82.cpp)
+add_executable(main83 main83.cpp)
+add_executable(main84 main84.cpp)
