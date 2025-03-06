@@ -2,3 +2,4 @@ project(part_four)
 
 add_subdirectory(using_the_observer_pattern)
 add_subdirectory(applying_the_factory_pattern)
+add_subdirectory(implementing_the_adapter_pattern)
