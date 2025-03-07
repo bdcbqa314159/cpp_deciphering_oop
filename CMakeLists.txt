@@ -13,6 +13,7 @@ add_subdirectory(part_one)
 add_subdirectory(part_two)
 add_subdirectory(part_three)
 add_subdirectory(part_four)
+add_subdirectory(part_five)
 
 
 
